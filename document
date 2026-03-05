@@ -1,0 +1,67 @@
+# Terraform EC2 Free‑Tier Project
+
+This project deploys two **t2.micro** EC2 instances on AWS using Terraform, following a clean, modular, and free‑tier‑safe architecture. It is designed for learning, portfolio demonstration, and interview preparation.
+
+---
+
+## Architecture Overview
+
+The configuration provisions the following AWS resources:
+
+- 1 VPC (10.0.0.0/16)
+- 1 Public Subnet (10.0.1.0/24)
+- Internet Gateway
+- Public Route Table with default route to IGW
+- Security Group allowing SSH (22) and HTTP (80)
+- **Two EC2 t2.micro instances** (Free Tier eligible)
+- 8GB gp2 EBS volumes per instance
+- Public IP assignment for SSH access
+
+All resources are free‑tier‑eligible and avoid chargeable components such as NAT Gateways, Load Balancers, and Elastic IPs.
+
+---
+
+## Project Structure
+├── main.tf ├── variables.tf ├── provider.tf ├── output.tf ├── .gitignore └── terraform.tfstate (ignored)
+
+
+---
+
+## Prerequisites
+
+- AWS account with IAM user and access keys
+- AWS CLI configured (`aws configure`)
+- Terraform installed (v1.0+ recommended)
+- Existing AWS key pair (e.g., `Jagadish_Instance`)
+- VS Code + Git Bash (optional but recommended)
+
+---
+
+## How to Deploy
+
+### 1. Initialize Terraform
+terraform init
+#### 2.Validate configuratio
+terraform validate
+#### 3.Preview the infrastructure
+terraform plan -var="key_name=Jagadish_Instance"
+
+##### 4.Apply and launch EC2 instances
+terraform apply -var="key_name=Jagadish_Instance" -auto-approve
+
+
+#### Destroy Infrastructure #####
+To avoid charges, destroy everything when done:
+terraform destroy -var="key_name=Jagadish_Instance" -auto-approve
+
+
+###### Free‑Tier Safety Notes
+This project avoids all non‑free‑tier components:
+- No NAT Gateway (expensive)
+- No Load Balancer
+- No Elastic IPs
+- No RDS or EFS
+- No CloudWatch detailed monitoring
+- EC2 instances limited to t2.micro
+- EBS volumes limited to 8GB each (free tier allows 30GB total)
+Running two EC2 instances 24/7 may exceed the monthly 750 free hours, so destroy or stop them when not needed.
